@@ -383,6 +383,22 @@ func setupTestNetCmd(c *cli.Context) error {
 			return err
 		}
 
+		config := map[string]interface{}{
+			"signer":         a.PrivateSpendKey.String(),
+			"max-cache-size": 8192,
+			"cache-ttl":      7200,
+		}
+
+		configData, err := json.MarshalIndent(config, "", "  ")
+		if err != nil {
+			return err
+		}
+		fmt.Println(string(configData))
+
+		err = ioutil.WriteFile(dir+"/config.json", configData, 0644)
+		if err != nil {
+			return err
+		}
 		err = ioutil.WriteFile(dir+"/genesis.json", genesisData, 0644)
 		if err != nil {
 			return err
