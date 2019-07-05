@@ -56,6 +56,21 @@ type Output struct {
 	Mask   crypto.Key `json:"mask,omitempty"`
 }
 
+func (o *Output) ViewGhostKey(a *crypto.Key, i int) *Output {
+
+	out := &Output{
+		Type:   o.Type,
+		Amount: o.Amount,
+		Script: o.Script,
+		Mask:   o.Mask,
+	}
+	for _, k := range o.Keys {
+		key := crypto.ViewGhostOutputKey(&k, a, &o.Mask, uint64(i))
+		out.Keys = append(out.Keys, *key)
+	}
+	return out
+}
+
 type Transaction struct {
 	Version uint8       `json:"version"`
 	Asset   crypto.Hash `json:"asset"`

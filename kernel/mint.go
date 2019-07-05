@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/MixinNetwork/mixin/common"
-	"github.com/MixinNetwork/mixin/config"
+	// "github.com/MixinNetwork/mixin/config"
 	"github.com/MixinNetwork/mixin/crypto"
 	"github.com/MixinNetwork/mixin/logger"
 )
@@ -25,7 +25,10 @@ func init() {
 
 func (node *Node) MintLoop() error {
 	for {
-		time.Sleep(7 * time.Minute)
+		// ---------------- test -------------
+		time.Sleep(1 * time.Minute)
+		// ---------------- test -------------
+		// time.Sleep(7 * time.Minute)
 
 		batch, amount := node.checkMintPossibility(node.Graph.GraphTimestamp, false)
 		if amount.Sign() <= 0 || batch <= 0 {
@@ -167,19 +170,27 @@ func (node *Node) validateMintSnapshot(snap *common.Snapshot, tx *common.Version
 }
 
 func (node *Node) checkMintPossibility(timestamp uint64, validateOnly bool) (int, common.Integer) {
+	// timestamp use nanosecond as unit.
 	if timestamp <= node.epoch {
 		return 0, common.Zero
 	}
 
 	since := timestamp - node.epoch
-	hours := int(since / 3600000000000)
-	batch := hours / 24
+	// hours := int(since / 3600000000000)
+	// batch := hours / 24
+
+	// ------------- test-------------
+	minutes := int(since / 60000000000)
+	batch := minutes
+	logger.Printf("batch --------------> %d\n", batch);
+	// -------------------------------
+	
 	if batch < 1 {
 		return 0, common.Zero
 	}
-	if hours%24 < config.KernelMintTimeBegin || hours%24 > config.KernelMintTimeEnd {
-		return 0, common.Zero
-	}
+	// if hours%24 < config.KernelMintTimeBegin || hours%24 > config.KernelMintTimeEnd {
+	// 	return 0, common.Zero
+	// }
 
 	pool := MintPool
 	for i := 0; i < batch/MintYearBatches; i++ {

@@ -14,6 +14,10 @@ type BadgerStore struct {
 	closing     bool
 }
 
+func (store *BadgerStore) GetSnapshotsDB() *badger.DB {
+	return store.snapshotsDB
+}
+
 func NewBadgerStore(dir string) (*BadgerStore, error) {
 	snapshotsDB, err := openDB(dir+"/snapshots", true)
 	if err != nil {

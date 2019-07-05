@@ -324,8 +324,26 @@ func setupTestNetCmd(c *cli.Context) error {
 		return account
 	}
 	for i := 0; i < 7; i++ {
-		signers = append(signers, randomPubAccount())
-		payees = append(payees, randomPubAccount())
+		s := randomPubAccount()
+		p := randomPubAccount()
+
+		fmt.Println("===================================")
+		fmt.Println("===== signer =====")
+		fmt.Printf("address:\t%s\n", s.String())
+		fmt.Printf("view public key:\t%s\n", s.PublicViewKey.String())
+		fmt.Printf("spend public key:\t%s\n", s.PublicSpendKey.String())
+		fmt.Printf("view private key:\t%s\n", s.PrivateViewKey.String())
+		fmt.Printf("spend private key:\t%s\n", s.PrivateSpendKey.String())
+		fmt.Println("===== payee =====")
+		fmt.Printf("address:\t%s\n", s.String())
+		fmt.Printf("view public key:\t%s\n", p.PublicViewKey.String())
+		fmt.Printf("spend public key:\t%s\n", p.PublicSpendKey.String())
+		fmt.Printf("view private key:\t%s\n", p.PrivateViewKey.String())
+		fmt.Printf("spend private key:\t%s\n", p.PrivateSpendKey.String())
+		fmt.Println("===================================")
+
+		signers = append(signers, s)
+		payees = append(payees, p)
 	}
 
 	inputs := make([]map[string]string, 0)
